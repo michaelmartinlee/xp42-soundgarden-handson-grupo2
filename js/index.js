@@ -19,22 +19,30 @@
 //     .then(result => console.log(result))
 //     .catch(error => console.log('error', error));
 
-`<h2>nome do evento - 05/03/2022</h2>
-<h4>Arctic Monkeys, The Kooks, Hiatus Kaiyote</h4>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro aperiam sunt quo similique, dolorum consectetur inventore ipsam, officiis neque natus eius harum alias quidem. Possimus nobis in inventore tenetur asperiores.</p>
-<a href="#" class="btn btn-primary">reservar ingresso</a>`
+var get = {
+    method: 'GET',
+    redirect: 'follow'
+};
+
+//Função para formatar a saída de uma data ISO
+const formatarData = (dataISO) => {
+    const doisDigitos = (umDigito) => {
+        return umDigito < 10 ? '0' + umDigito : umDigito;
+    }
+    dataISO = new Date(dataISO)
+    const diaDoMes = dataISO.getDate();
+    const mes = dataISO.getMonth(); // Muito cuidado, Janeiro é o mesmo que 0, não 1.
+    const ano = dataISO.getFullYear();
+    const dataFormatada = doisDigitos(diaDoMes) + "/" + doisDigitos(mes + 1) + "/" + ano;
+    return dataFormatada
+}
 
 const criarEstruturaEvento = (
     nomeEvento,
     dataEvento,
     atracaoEvento,
     descricaoEvento,
-    hrefbotao = "#"
-    // nomeEvento = "nome do evento",
-    // dataEvento = "evento scheduled",
-    // atracaoEvento = "evento attractions",
-    // descricaoEvento = "evento description",
-    // hrefbotao = "#"
+    hrefBotao = "#"
 ) => {
     const divEventos = document.querySelector("body > main > section:nth-child(2) > div.container.d-flex.justify-content-center.align-items-center")
     const eventoArticle = document.createElement("article")
@@ -42,7 +50,7 @@ const criarEstruturaEvento = (
     divEventos.appendChild(eventoArticle)
 
     const nomeEventoH2 = document.createElement("h2")
-    nomeEventoH2.innerHTML = `${nomeEvento} - ${dataEvento}`
+    nomeEventoH2.innerHTML = `${nomeEvento} - ${formatarData(dataEvento)}`
     eventoArticle.appendChild(nomeEventoH2)
 
     const atracaoEventoH4 = document.createElement("h4")
@@ -54,36 +62,42 @@ const criarEstruturaEvento = (
     eventoArticle.appendChild(descricaoEventoH2)
 
     const botaoEvento = document.createElement("a")
-    botaoEvento.setAttribute("href", hrefbotao)
+    botaoEvento.setAttribute("href", hrefBotao)
     botaoEvento.setAttribute("class", "btn btn-primary", )
     botaoEvento.innerHTML = `reservar ingresso`
     eventoArticle.appendChild(botaoEvento)
-
-    document.replaceChildren
 }
 
 
-
-
-
-
-var listaDeEventosGet = {
-    method: 'GET',
-    redirect: 'follow'
-};
-
-
-fetch("https://xp41-soundgarden-api.herokuapp.com/events", listaDeEventosGet)
+fetch("https://xp41-soundgarden-api.herokuapp.com/events", get)
     .then(response => response.text())
     .then((data) => JSON.parse(data))
     .then(listaDeEventos => {
 
+        //Ordenando a lista de Eventos
+        listaDeEventos.sort((a, b) => {
+            return new Date(a.scheduled) - new Date(b.scheduled);
+        });
+        // console.log(listaDeEventos);
+
+
+        //Filtrando a lista de Eventos para retornar apenas que ainda estão por vir
+        const eventosFuturos = listaDeEventos.filter((data) => {
+            const agora = new Date();
+            return new Date(data.scheduled) > agora
+        });
+        // console.log(eventosFuturos);
+
+
+        //For para resumir os eventos e retornar todos eles
         // for (let index = 0; index < listaDeEventos.length; index++) {
         //     const evento = listaDeEventos[index];
 
-        for (let index = 0; index < 3; index++) {
-            const evento = listaDeEventos[index];
 
+        //For para resumir os eventos e retornar apenas os 3 primeros da lista de eventos Futuros.
+        //E criá-los na Home com a função Criar Estrutura Evento 
+        for (let index = 0; index < 3; index++) {
+            const evento = eventosFuturos[index];
             criarEstruturaEvento(
                 nomeEvento = evento.name,
                 dataEvento = evento.scheduled,
@@ -92,39 +106,13 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events", listaDeEventosGet)
                 hrefbotao = "#"
             )
             const eventosResumo = {
-                    // nome: evento.name,
-                    data: evento.scheduled
-                        // atracao: evento.attractions,
-                        // data: evento.scheduled,
-                        // descricao: evento.description
-
-                }
-                // console.log(eventosResumo);
+                nome: evento.name,
+                data: evento.scheduled,
+                atracao: evento.attractions,
+                data: evento.scheduled,
+                descricao: evento.description
+            }
+            console.log(eventosResumo);
         }
     })
-    // .catch(error => console.log('error', error));
-
-
-
-
-//     fetch("index.html")
-//     .then((result) => result.text())
-//     .then((data) => new DOMParser().parseFromString(data, "text/html"))
-//     .then((htmlHome) => {
-//         const style = document.createElement("link");
-//         style.setAttribute("rel", "stylesheet");
-//         style.setAttribute("href", "css/index.css");
-
-//         document.querySelector("head").appendChild(style);
-
-//         const main = document.querySelector("main");
-//         const tituloDepoimentos = htmlHome.querySelector(".depoimento");
-//         const depoimentos = htmlHome.getElementById("falam_sobre");
-
-//         main.appendChild(tituloDepoimentos);
-//         main.appendChild(depoimentos);
-
-//         const tituloDepoimento = document.querySelector(".depoimento h3");
-//         tituloDepoimento.innerHTML = "O que falam sobre nós";
-//     });
-// };
+    .catch(error => console.log('error', error));
