@@ -1,29 +1,3 @@
-//identificar o clque no botão
-// console.log("link");
-
-// const index = {}
-// const btnReservarIngresso1 = document.getElementsByClassName("btn btn-primary")[0]
-// const btnReservarIngresso2 = document.getElementsByClassName("btn btn-primary")[1]
-// const btnReservarIngresso3 = document.getElementsByClassName("btn btn-primary")[2]
-
-
-
-// btnReservarIngresso.addEventListener("click", (event) => {
-//     console.log("clicou btn");
-// })
-
-//trazer últimos shows
-
-// fetch("https://xp41-soundgarden-api.herokuapp.com/events", listaDeEventosOpcoes)
-//     .then(response => response.text())
-//     .then(result => console.log(result))
-//     .catch(error => console.log('error', error));
-
-var get = {
-    method: 'GET',
-    redirect: 'follow'
-};
-
 //Função para formatar a saída de uma data ISO
 const formatarData = (dataISO) => {
     const doisDigitos = (umDigito) => {
@@ -42,7 +16,7 @@ const criarEstruturaEvento = (
     dataEvento,
     atracaoEvento,
     descricaoEvento,
-    hrefBotao = "#"
+    indexBotao
 ) => {
     const divEventos = document.querySelector("body > main > section:nth-child(2) > div.container.d-flex.justify-content-center.align-items-center")
     const eventoArticle = document.createElement("article")
@@ -62,14 +36,14 @@ const criarEstruturaEvento = (
     eventoArticle.appendChild(descricaoEventoH2)
 
     const botaoEvento = document.createElement("a")
-    botaoEvento.setAttribute("href", hrefBotao)
-    botaoEvento.setAttribute("class", "btn btn-primary", )
+    botaoEvento.setAttribute("class", "btn btn-primary")
+    botaoEvento.setAttribute("id", `botao-reservar${indexBotao}`)
     botaoEvento.innerHTML = `reservar ingresso`
     eventoArticle.appendChild(botaoEvento)
 }
 
 
-fetch("https://xp41-soundgarden-api.herokuapp.com/events", get)
+fetch("https://xp41-soundgarden-api.herokuapp.com/events")
     .then(response => response.text())
     .then((data) => JSON.parse(data))
     .then(listaDeEventos => {
@@ -103,7 +77,7 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events", get)
                 dataEvento = evento.scheduled,
                 atracaoEvento = evento.attractions,
                 descricaoEvento = evento.description,
-                hrefbotao = "#"
+                indexBotao = index
             )
             const eventosResumo = {
                 nome: evento.name,
@@ -113,6 +87,39 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events", get)
                 descricao: evento.description
             }
             console.log(eventosResumo);
+        }
+
+        //modal
+        var modal = document.getElementById("myModal");
+
+        var botaoReservar0 = document.getElementById("botao-reservar0");
+        botaoReservar0.addEventListener("click", (event) => {
+            event.preventDefault
+            modal.style.display = "block";
+            console.log("clicou");
+        })
+        var botaoReservar1 = document.getElementById("botao-reservar1");
+        botaoReservar1.addEventListener("click", (event) => {
+            event.preventDefault
+            modal.style.display = "block";
+            console.log("clicou");
+        })
+        var botaoReservar2 = document.getElementById("botao-reservar2");
+        botaoReservar2.addEventListener("click", (event) => {
+            event.preventDefault
+            modal.style.display = "block";
+            console.log("clicou");
+        })
+
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
     })
     .catch(error => console.log('error', error));

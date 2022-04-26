@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
-
 body {
     font-family: 'Questrial', sans-serif;
 }
@@ -24,9 +23,11 @@ aside {
     background-color: #C2185B;
 }
 
+
 .btn {
     margin: 1.5px;
 }
+
 
 .btn-primary {
     background-color: #C2185B;

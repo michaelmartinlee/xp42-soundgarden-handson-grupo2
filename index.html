@@ -8,6 +8,7 @@
     <title>Sound Garden</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
 </head>
 
 <body>
@@ -29,9 +30,9 @@
                     <h2>nome do evento - 05/03/2022</h2>
                     <h4>Arctic Monkeys, The Kooks, Hiatus Kaiyote</h4>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro aperiam sunt quo similique, dolorum consectetur inventore ipsam, officiis neque natus eius harum alias quidem. Possimus nobis in inventore tenetur asperiores.</p>
-                    <a href="#" class="btn btn-primary">reservar ingresso</a>
-                </article>
-                <article class="evento card p-5 m-3">
+                    <a id="myBtn" href="#" class="btn btn-primary">reservar ingresso</a>
+                </article> -->
+                <!-- <article class="evento card p-5 m-3">
                     <h2>nome do evento - 05/03/2022</h2>
                     <h4>Arctic Monkeys, The Kooks, Hiatus Kaiyote</h4>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro aperiam sunt quo similique, dolorum consectetur inventore ipsam, officiis neque natus eius harum alias quidem. Possimus nobis in inventore tenetur asperiores.</p>
@@ -68,6 +69,19 @@
                 </div>
             </div>
         </section>
+        <h2>Modal Example</h2>
+
+        <!-- Trigger/Open The Modal -->
+        <button>Open Modal</button>
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Some text in the Modal..</p>
+            </div>
+
+        </div>
 
     </main>
     <footer>
@@ -89,5 +103,6 @@
     </footer>
 </body>
 <script src="js/index.js"></script>
+<script src="js/modal.js"></script>
 
 </html>
