@@ -2,22 +2,20 @@
 // console.log("link");
 
 // const index = {}
-// const btnReservarIngresso1 = document.getElementsByClassName("btn btn-primary")[0]
-// const btnReservarIngresso2 = document.getElementsByClassName("btn btn-primary")[1]
-// const btnReservarIngresso3 = document.getElementsByClassName("btn btn-primary")[2]
 
 
 
-// btnReservarIngresso.addEventListener("click", (event) => {
+
+
+// 
+// btnReservarIngresso1.addEventListener("click", (event) => {
+//         event.preventDefault();
+//     })
+//     event.preventDefault();
 //     console.log("clicou btn");
 // })
 
-//trazer últimos shows
 
-// fetch("https://xp41-soundgarden-api.herokuapp.com/events", listaDeEventosOpcoes)
-//     .then(response => response.text())
-//     .then(result => console.log(result))
-//     .catch(error => console.log('error', error));
 
 var get = {
     method: 'GET',
@@ -116,3 +114,13 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events", get)
         }
     })
     .catch(error => console.log('error', error));
+
+
+const btnReservarIngresso = document.getElementsByClassName(`btn btn-primary`)
+console.log(btnReservarIngresso);
+
+console.log(typeof btnReservarIngresso);
+
+// btnReservarIngresso.addEventListener("click", (event) => {
+//     event.preventDefault();
+// })
