@@ -1,12 +1,13 @@
-const criarEstruturaEvento = (
+formatarData()
+
+const criarEstruturaTodosEventos = (
     nomeEvento,
     dataEvento,
     atracaoEvento,
     descricaoEvento,
     indexBotao
 ) => {
-    const divEventos = document.querySelector("body > main > section:nth-child(2) > div.container.d-flex.justify-content-center.align-items-center")
-    console.log(divEventos);
+    const divEventos = document.querySelector("body > main > section:nth-child(1) > div.container.d-flex.justify-content-center.align-items-center.flex-wrap")
     const eventoArticle = document.createElement("article")
     eventoArticle.setAttribute("class", "evento card p-5 m-3")
     divEventos.appendChild(eventoArticle)
@@ -50,9 +51,10 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events")
 
         //For para resumir os eventos e retornar apenas os 3 primeros da lista de eventos Futuros.
         //E criá-los na Home com a função Criar Estrutura Evento 
-        for (let index = 0; index < 3; index++) {
+        // for (let index = 0; index < listaDeEventos.length; index++) {
+        for (let index = 0; index < 50; index++) {
             const evento = eventosFuturos[index];
-            criarEstruturaEvento(
+            criarEstruturaTodosEventos(
                 nomeEvento = evento.name,
                 dataEvento = evento.scheduled,
                 atracaoEvento = evento.attractions,
