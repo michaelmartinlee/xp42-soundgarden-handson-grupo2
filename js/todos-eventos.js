@@ -52,7 +52,7 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events")
         //For para resumir os eventos e retornar apenas os 3 primeros da lista de eventos Futuros.
         //E criá-los na Home com a função Criar Estrutura Evento 
         // for (let index = 0; index < listaDeEventos.length; index++) {
-        for (let index = 0; index < 50; index++) {
+        for (let index = 0; index < eventosFuturos.length; index++) {
             const evento = eventosFuturos[index];
             criarEstruturaTodosEventos(
                 nomeEvento = evento.name,
@@ -69,6 +69,25 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events")
                 descricao: evento.description
             }
             console.log(eventosResumo);
+        }
+        const modalTodosOsEventos = document.getElementById("myModal");
+        try {
+            for (let index2 = 0; index2 < eventosFuturos.length; index2++) {
+                document.getElementById(`botao-reservar${index2}`).addEventListener("click", (event) => {
+                    event.preventDefault
+                    modalTodosOsEventos.style.display = "block";
+                })
+            }
+        } catch (error) {}
+        const spanTodosOsEventos = document.getElementsByClassName("close")[0];
+
+        spanTodosOsEventos.onclick = function() {
+            modalTodosOsEventos.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modalTodosOsEventos) {
+                modalTodosOsEventos.style.display = "none";
+            }
         }
     })
     .catch(error => console.log('error', error));

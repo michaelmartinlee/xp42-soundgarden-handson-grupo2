@@ -6,7 +6,6 @@ const criarEstruturaEvento = (
     indexBotao
 ) => {
     const divEventos = document.querySelector("body > main > section:nth-child(2) > div.container.d-flex.justify-content-center.align-items-center")
-    console.log(divEventos);
     const eventoArticle = document.createElement("article")
     eventoArticle.setAttribute("class", "evento card p-5 m-3")
     divEventos.appendChild(eventoArticle)
