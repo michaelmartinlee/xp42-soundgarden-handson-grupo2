@@ -70,7 +70,5 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events")
             }
             console.log(eventosResumo);
         }
-
-        modalReservarIngresso()
     })
     .catch(error => console.log('error', error));
