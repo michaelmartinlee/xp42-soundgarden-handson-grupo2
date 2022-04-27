@@ -23,6 +23,12 @@ aside {
     background-color: #C2185B;
 }
 
+
+.btn {
+    margin: 1.5px;
+}
+
+
 .btn-primary {
     background-color: #C2185B;
     border-color: #C2185B;
