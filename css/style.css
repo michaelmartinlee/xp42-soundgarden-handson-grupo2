@@ -11,6 +11,31 @@ header {
     background-color: #fff;
 }
 
+
+aside {
+    min-height: 100vh;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    background-color: #C2185B;
+}
+
+
+.btn {
+    margin: 1.5px;
+}
+
+
+.btn-primary {
+    background-color: #C2185B;
+    border-color: #C2185B;
+}
+
+main.login {
+    width: 400px;
+}
+
 section.full {
     width: 100%;
     min-height: 80vh;
