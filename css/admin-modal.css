@@ -1,4 +1,4 @@
-.modal {
+.myModal {
     display: none;
     /* Hidden by default */
     position: fixed;
@@ -21,20 +21,22 @@
     /* Black w/ opacity */
 }
 
-.modal-content {
+/* Modal Content */
+.modalContent {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    /* display: none; */
 }
 
+/* The Close Button */
 .close {
     color: #aaaaaa;
     float: right;
-    font-size: 28px;
+    font-size: 25px;
     font-weight: bold;
+    margin: 0;
 }
 
 .close:hover,
@@ -42,9 +44,4 @@
     color: #000;
     text-decoration: none;
     cursor: pointer;
-}
-
-#tbody-modal {
-    overflow-y: scroll;
-
 }

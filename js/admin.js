@@ -1,17 +1,53 @@
-const tableBodySelector = document.querySelector("#tbody");
+async function getEvents() {  // Faz requisição na Api, para preencher o painel com os eventos
 
-function createElementFromEvent(data) {
-    data.forEach((event, index) => {
+    try {
+        const response = await fetch('https://xp41-soundgarden-api.herokuapp.com/events')
+
+        const data = await response.json();
+
+        createElementsFromEvents(data); // Função que cria os elementos e botões a partir da requisição
+
+        return data;
+
+    } catch (error) {
+        console.error(error)
+    }
+}
+getEvents();
+
+async function getEventsToModal(id) {
+    //Faz uma requisicao GET com o fetch e recebe a lista de reservas em json
+    const bookingList = await fetch(`https://xp41-soundgarden-api.herokuapp.com/bookings/event/${id}`)
+        .then(data => data.json())
+        .catch(error => console.log(error))
+
+    //Verifica se existem reservas feitas para esse evento, caso não exista exibe uma mensagem
+    if (bookingList.length < 1) {
+        const thead = document.querySelector('#thead-modal')
+        thead.setAttribute('style', 'display:none')
+        document.querySelector('#tbody-modal').innerHTML = "Não há reservas para esse evento"
+        return;
+    } else {
+        createListToModal(bookingList);
+    }
+
+}
+
+
+async function createElementsFromEvents(data) {     //Função que cria os todos os eventos na pagina
+    const tableSelector = document.querySelector('.table'); // selcionando a tabela
+    const tableBodySelector = tableSelector.childNodes[3];
+    data.forEach((event, index) => {  // percorrendo todos os eventos
         const trElement = document.createElement('tr');
 
         const thElement = document.createElement('th');
-        thElement.setAttribute('scope', 'row')
+        thElement.setAttribute('scope', 'row');
         thElement.innerText = index + 1;
 
         const firstTdElement = document.createElement('td');
-        const date = event.scheduled.substring(0, 10).replaceAll('-', '/');
-        const time = event.scheduled.substring(11, 16)
-        firstTdElement.innerText = date + " " + time;
+        const date = event.scheduled.substring(0, 10);
+        const time = event.scheduled.substring(11, 16);
+        firstTdElement.innerText = date.replaceAll('-', '/') + " " + time;
 
         const secondTdElement = document.createElement('td');
         secondTdElement.innerText = event.name;
@@ -21,35 +57,79 @@ function createElementFromEvent(data) {
 
         const fourthTdElement = document.createElement('td');
 
-        const firstAnchor = document.createElement('a');
-        firstAnchor.innerText = "ver reservas"
+        const firstAnchor = document.createElement('a'); // Botão listar evento, que abre um modal dinâmico
+        firstAnchor.innerText = "ver reservas";
         firstAnchor.classList.add('btn');
-        firstAnchor.classList.add("btn-dark");
+        firstAnchor.classList.add('btn-dark');
+        firstAnchor.setAttribute('data', event._id);
+        firstAnchor.addEventListener('click', () => {
 
-        const secondAnchor = document.createElement('a');
-        secondAnchor.innerText = "editar"
-        secondAnchor.href = "editar-evento.html?id=" + event._id;
+            openAndCloseModal();    // Função que permite abrir e fechar o modal
+            getEventsToModal(event._id);    // Função que faz requisição para Api para receber info
+        })
+
+
+        const secondAnchor = document.createElement('a');   // Botão editar evento
+        secondAnchor.innerText = "editar";
         secondAnchor.classList.add('btn');
         secondAnchor.classList.add('btn-secondary');
+        secondAnchor.href = 'editar-evento.html?id=' + event._id;
 
-        const thirdAnchor = document.createElement('a');
-        thirdAnchor.innerText = "excluir"
-        thirdAnchor.href = "excluir-evento.html?id=" + event._id;
+        const thirdAnchor = document.createElement('a');    // Botão excluir evento
+        thirdAnchor.innerText = "excluir";
         thirdAnchor.classList.add('btn');
         thirdAnchor.classList.add('btn-danger');
+        thirdAnchor.href = 'excluir-evento.html?id=' + event._id;
+
+        fourthTdElement.append(firstAnchor, secondAnchor, thirdAnchor);
 
 
-        fourthTdElement.append(firstAnchor, secondAnchor, thirdAnchor, trElement);
-        tableBodySelector.appendChild(trElement);
         trElement.append(thElement, firstTdElement, secondTdElement, thirdTdElement, fourthTdElement);
-    });
+        tableBodySelector.appendChild(trElement);
+
+    })
 }
 
-fetch("https://xp41-soundgarden-api.herokuapp.com/events", {
-    "method": "GET"
-}).then(response => {
-    return response.json()
-}).then(data => createElementFromEvent(data))
-    .catch(error => console.log(error));
+async function openAndCloseModal() {  // Função que abre e fecha o modal
+    const modal = document.querySelector(".myModal");
+    modal.setAttribute('style', 'display:block')
+
+    const span = document.getElementsByClassName("close")[0];   // Clicar no botão x para fechar
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = (event) => {  // Clicar fora do modal, fecha ele
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+
+async function createListToModal(data) {    //Função que cria o modal dinâmicamente
+    const thead = document.querySelector('#thead-modal')
+    thead.setAttribute('style', 'display:deafult')
+    document.querySelector('#tbody-modal').innerHTML = null
+
+    const dataObject = data[0]
+
+    const trElement = document.createElement('tr');
+
+    const thElement = document.createElement('th');
+    thElement.setAttribute('scope', 'row')
+
+    const nameTdElement = document.createElement('td');
+    nameTdElement.innerText = dataObject.owner_name;
+
+    const emailTdElement = document.createElement('td');
+    emailTdElement.innerText = dataObject.owner_email;
+
+    const ticketsTdElement = document.createElement('td');
+    ticketsTdElement.innerText = dataObject.number_tickets;
+
+    const tableBodyModalSelector = document.querySelector('#tbody-modal')
+    tableBodyModalSelector.appendChild(trElement);
+    trElement.append(thElement, nameTdElement, emailTdElement, ticketsTdElement);
 
 
+}
