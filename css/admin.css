@@ -1,0 +1,64 @@
+#div-btn {
+    margin-left: -25%;
+
+}
+
+.img-responsive {
+    width: 100px;
+
+}
+
+aside>a {
+    display: flex;
+
+}
+
+@media only screen and (max-device-width: 1000px) {
+    #div-btn {
+        margin-left: -35%;
+
+    }
+
+}
+
+@media only screen and (max-device-width: 875px) {
+    #div-btn {
+        margin-left: 120%;
+
+    }
+
+    #aside-btn {
+        text-align: center;
+        width: 100%;
+        height: 200px;
+    }
+
+    main {
+        margin-left: 10%;
+    }
+}
+
+@media only screen and (max-device-width: 768px) {
+    #div-btn {
+        margin-left: 30%;
+
+    }
+
+
+}
+
+@media only screen and (max-device-width: 480px) {
+    .row-attraction {
+        display: none;
+    }
+
+    main {
+        margin: 0;
+        padding: 0;
+    }
+
+    #row-attraction {
+        display: none;
+    }
+
+}
