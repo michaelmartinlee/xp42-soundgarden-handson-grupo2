@@ -26,7 +26,8 @@ const criarEstruturaEvento = (
     const botaoEvento = document.createElement("a")
     botaoEvento.setAttribute("class", "btn btn-primary")
     botaoEvento.setAttribute("id", `botao-reservar${indexBotao}`)
-    botaoEvento.setAttribute("accessKey", `${idEvento}`)
+    botaoEvento.setAttribute("idevento", `${idEvento}`)
+    botaoEvento.setAttribute("nomeevento", `${nomeEvento}`)
     botaoEvento.innerHTML = `reservar ingresso`
     eventoArticle.appendChild(botaoEvento)
 }
@@ -85,14 +86,16 @@ const listarEventosFazerReserva = async() => {
 
     const botaoConfirmar = document.querySelector("#myModal > div > div > div.modal-footer > button.btn.btn-primary")
 
+
     document.getElementById("botao-reservar0")
         .addEventListener("click", (event) => {
-            const botaoAlvo = event.target.accessKey
-            return botaoAlvo;
+            const botaoAlvo = event.target
+            const idevento = botaoAlvo.getAttribute("idevento")
+            const nomeEvento = botaoAlvo.getAttribute("nomeevento")
+
+            document.querySelector("#id").value = idevento;
         })
 
-
-    console.log(idBotaoAlvo());
 
     botaoConfirmar.addEventListener("click", (event) => {
         event.preventDefault();
