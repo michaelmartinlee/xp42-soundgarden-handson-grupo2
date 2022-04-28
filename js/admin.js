@@ -62,9 +62,6 @@ async function createElementsFromEvents(data) {
         firstAnchor.setAttribute('data', event._id);
         const btnModal = document.querySelectorAll(".btn-dark");
         openAndCloseModal(btnModal);
-        getEventsToModal(event._id)
-
-
 
 
         const secondAnchor = document.createElement('a');
@@ -89,6 +86,7 @@ async function createElementsFromEvents(data) {
 }
 
 async function openAndCloseModal(event) {
+
     const span = document.getElementsByClassName("close")[0];
     span.onclick = function () {
         modal.style.display = "none";
@@ -102,9 +100,11 @@ async function openAndCloseModal(event) {
         }
     }
 
-    for (var x = 0; x < event.length; x++) {  // Para percorrer o array contendo todos os botoes
+    for (var x = 0; x < event.length; x++) {
+        const getId = event[x].getAttribute('data') // Para percorrer o array contendo todos os botoes
         event[x].addEventListener("click", () => {
-            modal.setAttribute('style', 'display: block')  // para aparecer na tela
+            modal.setAttribute('style', 'display: block')
+            getEventsToModal(getId)
         })
     }
 
