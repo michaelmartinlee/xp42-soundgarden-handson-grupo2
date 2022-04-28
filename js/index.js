@@ -79,64 +79,58 @@ const listarEventosFazerReserva = async() => {
         })
         .catch(error => console.log('error', error));
 
-    const modalHome = document.getElementById("myModal");
-
-    const formReservarIngresso = modalHome.querySelector("form");
-    console.log(formReservarIngresso.length);
-
-    const botaoConfirmar = document.querySelector("#myModal > div > div > div.modal-footer > button.btn.btn-primary")
-
+    const formReservarIngresso = document.querySelector("#reserva");
 
     document.getElementById("botao-reservar0")
         .addEventListener("click", (event) => {
             const botaoAlvo = event.target
             const idevento = botaoAlvo.getAttribute("idevento")
-            const nomeEvento = botaoAlvo.getAttribute("nomeevento")
+            document.querySelector("#id").value = idevento;
+        })
+
+    document.getElementById("botao-reservar1")
+        .addEventListener("click", (event) => {
+            const botaoAlvo = event.target
+            const idevento = botaoAlvo.getAttribute("idevento")
+            document.querySelector("#id").value = idevento;
+        })
+
+    document.getElementById("botao-reservar2")
+        .addEventListener("click", (event) => {
+            const botaoAlvo = event.target
+            const idevento = botaoAlvo.getAttribute("idevento")
 
             document.querySelector("#id").value = idevento;
         })
 
-
+    const botaoConfirmar = document.querySelector("#myModal > div > div > div.modal-footer > button.btn.btn-primary")
     botaoConfirmar.addEventListener("click", (event) => {
         event.preventDefault();
-
-        const corpoPost2 = {
-            owner_name: "Felix",
-            owner_email: "email@email.com",
-            number_tickets: 1,
-            event_id: botaoAlvo
-        }
-
-        console.log(corpoPost2);
-
         const corpoPost = {
-            owner_name: "Felix",
-            owner_email: "email@email.com",
-            number_tickets: 1,
-            event_id: "6269f95445cb0602abe89dc6"
+            owner_name: formReservarIngresso[2].value,
+            owner_email: formReservarIngresso[3].value,
+            number_tickets: formReservarIngresso[1].value,
+            event_id: formReservarIngresso[0].value
         }
 
-        // fetch(`https://xp41-soundgarden-api.herokuapp.com/bookings`, {
-        //         method: "POST",
-        //         headers: {
-        //             Accept: "application/json",
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify(corpoPost),
-        //     })
-        //     .then(() => {
-        //         alert("Parabéns, sua reserva está concluída!");
-        //     })
-        //     .catch(error => console.log('error', error));
+        // const Exemplo visual de corpo para o POST = {
+        //     owner_name: "Felix",
+        //     owner_email: "email@email.com",
+        //     number_tickets: 1,
+        //     event_id: "6269f95445cb0602abe89dc6"
+        // }
+        fetch(`https://xp41-soundgarden-api.herokuapp.com/bookings`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(corpoPost),
+            })
+            .then(() => {
+                alert("Parabéns, sua reserva está concluída!");
+            })
+            .catch(error => console.log('error', error));
     })
-
 }
-
 listarEventosFazerReserva()
-
-// document.querySelector("#reserva")
-
-// "owner_name": "Felix",
-// "owner_email": "email@email.com",
-// "number_tickets": 1,
-// "event_id":"{{ _.id }}"

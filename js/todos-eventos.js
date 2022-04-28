@@ -5,9 +5,11 @@ const criarEstruturaTodosEventos = (
     dataEvento,
     atracaoEvento,
     descricaoEvento,
-    indexBotao
+    indexBotao,
+    idEvento
 ) => {
     const divEventos = document.querySelector("body > main > section:nth-child(1) > div.container.d-flex.justify-content-center.align-items-center.flex-wrap")
+    divEventos.setAttribute("id", "lista-eventos")
     const eventoArticle = document.createElement("article")
     eventoArticle.setAttribute("class", "evento card p-5 m-3")
     divEventos.appendChild(eventoArticle)
@@ -27,73 +29,112 @@ const criarEstruturaTodosEventos = (
     const botaoEvento = document.createElement("a")
     botaoEvento.setAttribute("class", "btn btn-primary")
     botaoEvento.setAttribute("id", `botao-reservar${indexBotao}`)
+    botaoEvento.setAttribute("idevento", `${idEvento}`)
     botaoEvento.innerHTML = `reservar ingresso`
     eventoArticle.appendChild(botaoEvento)
 }
 
-fetch("https://xp41-soundgarden-api.herokuapp.com/events")
-    .then(response => response.text())
-    .then((data) => JSON.parse(data))
-    .then(listaDeEventos => {
+const listarEventosFazerReservaTodas = async() => {
 
-        //Ordenando a lista de Eventos
-        listaDeEventos.sort((a, b) => {
-            return new Date(a.scheduled) - new Date(b.scheduled);
-        });
-        // console.log(listaDeEventos);
+    await fetch("https://xp41-soundgarden-api.herokuapp.com/events")
+        .then(response => response.text())
+        .then((data) => JSON.parse(data))
+        .then(listaDeEventos => {
+            listaDeEventos.sort((a, b) => {
+                return new Date(a.scheduled) - new Date(b.scheduled);
+            });
 
+            const eventosFuturos = listaDeEventos.filter((data) => {
+                const agora = new Date();
+                return new Date(data.scheduled) > agora
+            });
 
-        //Filtrando a lista de Eventos para retornar apenas que ainda estão por vir
-        const eventosFuturos = listaDeEventos.filter((data) => {
-            const agora = new Date();
-            return new Date(data.scheduled) > agora
-        });
-
-        //For para resumir os eventos e retornar apenas os 3 primeros da lista de eventos Futuros.
-        //E criá-los na Home com a função Criar Estrutura Evento 
-        // for (let index = 0; index < listaDeEventos.length; index++) {
-        for (let index = 0; index < eventosFuturos.length; index++) {
-            const evento = eventosFuturos[index];
-            criarEstruturaTodosEventos(
-                nomeEvento = evento.name,
-                dataEvento = evento.scheduled,
-                atracaoEvento = evento.attractions,
-                descricaoEvento = evento.description,
-                indexBotao = index
-            )
-            const eventosResumo = {
-                nome: evento.name,
-                data: evento.scheduled,
-                atracao: evento.attractions,
-                data: evento.scheduled,
-                descricao: evento.description
+            for (let index = 0; index < eventosFuturos.length; index++) {
+                const evento = eventosFuturos[index];
+                criarEstruturaTodosEventos(
+                    nomeEvento = evento.name,
+                    dataEvento = evento.scheduled,
+                    atracaoEvento = evento.attractions,
+                    descricaoEvento = evento.description,
+                    indexBotao = index,
+                    idEvento = evento._id
+                )
             }
-            console.log(eventosResumo);
-        }
-        const modalTodosOsEventos = document.getElementById("myModal");
-        try {
-            for (let index2 = 0; index2 < eventosFuturos.length; index2++) {
-                document.getElementById(`botao-reservar${index2}`).addEventListener("click", (event) => {
-                    event.preventDefault
-                    modalTodosOsEventos.style.display = "block";
-                })
-            }
-        } catch (error) {}
-        const spanTodosOsEventos = document.getElementsByClassName("close")[0];
+        })
 
-        var botaoFecharTodosEventos = document.getElementById("modal-home-fechar");
-        var botaoCancelarTodosEventos = document.getElementById("modal-home-cancelar");
 
-        botaoFecharTodosEventos.onclick = function() {
-            modalTodosOsEventos.style.display = "none";
-        }
-        botaoCancelarTodosEventos.onclick = function() {
-            modalTodosOsEventos.style.display = "none";
-        }
-        window.onclick = function(event) {
-            if (event.target == modalTodosOsEventos) {
-                modalTodosOsEventos.style.display = "none";
-            }
-        }
-    })
     .catch(error => console.log('error', error));
+}
+
+const abrirEfecharModal = async() => {
+    await listarEventosFazerReservaTodas()
+
+    var modal = document.getElementById("myModal");
+
+    const novaListaEventos = document.getElementsByClassName("evento")
+    const qtdDeEventos = novaListaEventos.length
+
+    for (let index = 0; index < novaListaEventos.length; index++) {
+        var botaoReservar = document.querySelector(`#botao-reservar${index}`)
+        botaoReservar.addEventListener("click", (event) => {
+            event.preventDefault()
+            modal.style.display = "block";
+            const botaoAlvo = event.target
+            const idevento = botaoAlvo.getAttribute("idevento")
+            document.querySelector("#id").value = idevento;
+        })
+    }
+    var botaoFechar = document.getElementById("modal-home-fechar");
+    var botaoCancelar = document.getElementById("modal-home-cancelar");
+
+
+
+    botaoFechar.onclick = function() {
+        modal.style.display = "none";
+        formReservarIngresso[0].value = ""
+        formReservarIngresso[2].value = ""
+        formReservarIngresso[3].value = ""
+    }
+    botaoCancelar.onclick = function() {
+        modal.style.display = "none";
+        formReservarIngresso[0].value = ""
+        formReservarIngresso[2].value = ""
+        formReservarIngresso[3].value = ""
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = ""
+        }
+    }
+
+    const formReservarIngresso = document.querySelector("#reserva");
+
+    const botaoConfirmar = document.querySelector("#myModal > div > div > div.modal-footer > button.btn.btn-primary")
+    botaoConfirmar.addEventListener("click", (event) => {
+        event.preventDefault();
+        const corpoPost = {
+            owner_name: formReservarIngresso[2].value,
+            owner_email: formReservarIngresso[3].value,
+            number_tickets: formReservarIngresso[1].value,
+            event_id: formReservarIngresso[0].value
+        }
+        fetch(`https://xp41-soundgarden-api.herokuapp.com/bookings`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(corpoPost),
+            })
+            .then(() => {
+                alert("Parabéns, sua reserva está concluída!");
+            })
+            .catch(error => console.log('error', error));
+    })
+}
+
+abrirEfecharModal()
+
+const enviarPedidoReserva = () => {
+
+}

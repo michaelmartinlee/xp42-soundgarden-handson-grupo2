@@ -20,15 +20,23 @@ const modalReservarIngresso = () => {
     var botaoFechar = document.getElementById("modal-home-fechar");
     var botaoCancelar = document.getElementById("modal-home-cancelar");
 
+    const formReservarIngresso = document.querySelector("#reserva");
+
     botaoFechar.onclick = function() {
         modal.style.display = "none";
+        formReservarIngresso[0].value = ""
+        formReservarIngresso[2].value = ""
+        formReservarIngresso[3].value = ""
     }
     botaoCancelar.onclick = function() {
         modal.style.display = "none";
+        formReservarIngresso[0].value = ""
+        formReservarIngresso[2].value = ""
+        formReservarIngresso[3].value = ""
     }
     window.onclick = function(event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+            modal.style.display = ""
         }
     }
 
