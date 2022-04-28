@@ -3,7 +3,8 @@ const criarEstruturaEvento = (
     dataEvento,
     atracaoEvento,
     descricaoEvento,
-    indexBotao
+    indexBotao,
+    idEvento
 ) => {
     const divEventos = document.querySelector("body > main > section:nth-child(2) > div.container.d-flex.justify-content-center.align-items-center")
     const eventoArticle = document.createElement("article")
@@ -25,49 +26,114 @@ const criarEstruturaEvento = (
     const botaoEvento = document.createElement("a")
     botaoEvento.setAttribute("class", "btn btn-primary")
     botaoEvento.setAttribute("id", `botao-reservar${indexBotao}`)
+    botaoEvento.setAttribute("accessKey", `${idEvento}`)
     botaoEvento.innerHTML = `reservar ingresso`
     eventoArticle.appendChild(botaoEvento)
 }
 
-fetch("https://xp41-soundgarden-api.herokuapp.com/events")
-    .then(response => response.text())
-    .then((data) => JSON.parse(data))
-    .then(listaDeEventos => {
+const listarEventosFazerReserva = async() => {
 
-        //Ordenando a lista de Eventos
-        listaDeEventos.sort((a, b) => {
-            return new Date(a.scheduled) - new Date(b.scheduled);
-        });
-        // console.log(listaDeEventos);
+    await fetch("https://xp41-soundgarden-api.herokuapp.com/events")
+        .then(response => response.text())
+        .then((data) => JSON.parse(data))
+        .then(listaDeEventos => {
+
+            //Ordenando a lista de Eventos
+            listaDeEventos.sort((a, b) => {
+                return new Date(a.scheduled) - new Date(b.scheduled);
+            });
+            // console.log(listaDeEventos);
 
 
-        //Filtrando a lista de Eventos para retornar apenas que ainda estão por vir
-        const eventosFuturos = listaDeEventos.filter((data) => {
-            const agora = new Date();
-            return new Date(data.scheduled) > agora
-        });
+            //Filtrando a lista de Eventos para retornar apenas que ainda estão por vir
+            const eventosFuturos = listaDeEventos.filter((data) => {
+                const agora = new Date();
+                return new Date(data.scheduled) > agora
+            });
 
-        //For para resumir os eventos e retornar apenas os 3 primeros da lista de eventos Futuros.
-        //E criá-los na Home com a função Criar Estrutura Evento 
-        for (let index = 0; index < 3; index++) {
-            const evento = eventosFuturos[index];
-            criarEstruturaEvento(
-                nomeEvento = evento.name,
-                dataEvento = evento.scheduled,
-                atracaoEvento = evento.attractions,
-                descricaoEvento = evento.description,
-                indexBotao = index
-            )
-            const eventosResumo = {
-                nome: evento.name,
-                data: evento.scheduled,
-                atracao: evento.attractions,
-                data: evento.scheduled,
-                descricao: evento.description
+            //For para resumir os eventos e retornar apenas os 3 primeros da lista de eventos Futuros.
+            //E criá-los na Home com a função Criar Estrutura Evento 
+            for (let index = 0; index < 3; index++) {
+                const evento = eventosFuturos[index];
+                criarEstruturaEvento(
+                    nomeEvento = evento.name,
+                    dataEvento = evento.scheduled,
+                    atracaoEvento = evento.attractions,
+                    descricaoEvento = evento.description,
+                    indexBotao = index,
+                    idEvento = evento._id
+
+                )
+                const eventosResumo = {
+                    id: evento._id,
+                    nome: evento.name,
+                    data: evento.scheduled,
+                    atracao: evento.attractions,
+                    data: evento.scheduled,
+                    descricao: evento.description
+                }
+                console.log(eventosResumo);
             }
-            console.log(eventosResumo);
+            modalReservarIngresso()
+        })
+        .catch(error => console.log('error', error));
+
+    const modalHome = document.getElementById("myModal");
+
+    const formReservarIngresso = modalHome.querySelector("form");
+    console.log(formReservarIngresso.length);
+
+    const botaoConfirmar = document.querySelector("#myModal > div > div > div.modal-footer > button.btn.btn-primary")
+
+    document.getElementById("botao-reservar0")
+        .addEventListener("click", (event) => {
+            const botaoAlvo = event.target.accessKey
+            return botaoAlvo;
+        })
+
+
+    console.log(idBotaoAlvo());
+
+    botaoConfirmar.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        const corpoPost2 = {
+            owner_name: "Felix",
+            owner_email: "email@email.com",
+            number_tickets: 1,
+            event_id: botaoAlvo
         }
 
-        modalReservarIngresso()
+        console.log(corpoPost2);
+
+        const corpoPost = {
+            owner_name: "Felix",
+            owner_email: "email@email.com",
+            number_tickets: 1,
+            event_id: "6269f95445cb0602abe89dc6"
+        }
+
+        // fetch(`https://xp41-soundgarden-api.herokuapp.com/bookings`, {
+        //         method: "POST",
+        //         headers: {
+        //             Accept: "application/json",
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: JSON.stringify(corpoPost),
+        //     })
+        //     .then(() => {
+        //         alert("Parabéns, sua reserva está concluída!");
+        //     })
+        //     .catch(error => console.log('error', error));
     })
-    .catch(error => console.log('error', error));
+
+}
+
+listarEventosFazerReserva()
+
+// document.querySelector("#reserva")
+
+// "owner_name": "Felix",
+// "owner_email": "email@email.com",
+// "number_tickets": 1,
+// "event_id":"{{ _.id }}"

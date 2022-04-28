@@ -70,14 +70,44 @@
             </div>
         </section>
 
-        <div id="myModal" class="modal">
-
-            <!-- Modal content -->
+        <!-- <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <p>Some text in the Modal..</p>
             </div>
 
+        </div> -->
+        <div class="modal" id="myModal" tabindex="-1" aria-labelledby="modal de reserva" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="title">Título do evento</h5>
+                        <button id="modal-home-fechar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="reserva" class="col-12">
+                            <input type="hidden" name="event_id" id="id" value="" />
+                            <input type="hidden" name="number_tickets" value="1" />
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome</label>
+                                <input type="text" class="form-control" id="nome" required aria-describedby="nome" name="owner_name" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required aria-describedby="email" name="owner_email" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modal-home-cancelar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+                        <button type="submit" class="btn btn-primary" form="reserva">
+                Confirmar
+              </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -102,5 +132,6 @@
 <script src="js/formatar-data.js"></script>
 <script src="js/index.js"></script>
 <script src="js/modal-home.js"></script>
+<script src="js/enviar-pedido-de-reserva.js"></script>
 
 </html>

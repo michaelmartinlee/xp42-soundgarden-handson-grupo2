@@ -3,23 +3,27 @@ const modalReservarIngresso = () => {
 
     const botaoReservar0 = document.getElementById("botao-reservar0");
     botaoReservar0.addEventListener("click", (event) => {
-        event.preventDefault
+        event.preventDefault()
         modal.style.display = "block";
     })
     const botaoReservar1 = document.getElementById("botao-reservar1");
     botaoReservar1.addEventListener("click", (event) => {
-        event.preventDefault
+        event.preventDefault()
         modal.style.display = "block";
     })
     const botaoReservar2 = document.getElementById("botao-reservar2");
     botaoReservar2.addEventListener("click", (event) => {
-        event.preventDefault
+        event.preventDefault()
         modal.style.display = "block";
     })
 
-    var span = document.getElementsByClassName("close")[0];
+    var botaoFechar = document.getElementById("modal-home-fechar");
+    var botaoCancelar = document.getElementById("modal-home-cancelar");
 
-    span.onclick = function() {
+    botaoFechar.onclick = function() {
+        modal.style.display = "none";
+    }
+    botaoCancelar.onclick = function() {
         modal.style.display = "none";
     }
     window.onclick = function(event) {

@@ -81,7 +81,13 @@ fetch("https://xp41-soundgarden-api.herokuapp.com/events")
         } catch (error) {}
         const spanTodosOsEventos = document.getElementsByClassName("close")[0];
 
-        spanTodosOsEventos.onclick = function() {
+        var botaoFecharTodosEventos = document.getElementById("modal-home-fechar");
+        var botaoCancelarTodosEventos = document.getElementById("modal-home-cancelar");
+
+        botaoFecharTodosEventos.onclick = function() {
+            modalTodosOsEventos.style.display = "none";
+        }
+        botaoCancelarTodosEventos.onclick = function() {
             modalTodosOsEventos.style.display = "none";
         }
         window.onclick = function(event) {
