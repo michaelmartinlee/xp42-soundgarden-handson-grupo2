@@ -1,11 +1,11 @@
-async function getEvents() {
+async function getEvents() {  // Faz requisição na Api, para preencher o painel com os eventos
 
     try {
         const response = await fetch('https://xp41-soundgarden-api.herokuapp.com/events')
 
         const data = await response.json();
 
-        createElementsFromEvents(data);
+        createElementsFromEvents(data); // Função que cria os elementos e botões a partir da requisição
 
         return data;
 
@@ -23,19 +23,21 @@ async function getEventsToModal(id) {
 
     //Verifica se existem reservas feitas para esse evento, caso não exista exibe uma mensagem
     if (bookingList.length < 1) {
+        const thead = document.querySelector('#thead-modal')
+        thead.setAttribute('style', 'display:none')
         document.querySelector('#tbody-modal').innerHTML = "Não há reservas para esse evento"
         return;
+    } else {
+        createListToModal(bookingList);
     }
-
-    createListToModal(bookingList);
 
 }
 
 
-async function createElementsFromEvents(data) {
-    const tableSelector = document.querySelector('.table');
+async function createElementsFromEvents(data) {     //Função que cria os todos os eventos na pagina
+    const tableSelector = document.querySelector('.table'); // selcionando a tabela
     const tableBodySelector = tableSelector.childNodes[3];
-    data.forEach((event, index) => {
+    data.forEach((event, index) => {  // percorrendo todos os eventos
         const trElement = document.createElement('tr');
 
         const thElement = document.createElement('th');
@@ -55,22 +57,25 @@ async function createElementsFromEvents(data) {
 
         const fourthTdElement = document.createElement('td');
 
-        const firstAnchor = document.createElement('a');
+        const firstAnchor = document.createElement('a'); // Botão listar evento, que abre um modal dinâmico
         firstAnchor.innerText = "ver reservas";
         firstAnchor.classList.add('btn');
         firstAnchor.classList.add('btn-dark');
         firstAnchor.setAttribute('data', event._id);
-        const btnModal = document.querySelectorAll(".btn-dark");
-        openAndCloseModal(btnModal);
+        firstAnchor.addEventListener('click', () => {
+
+            openAndCloseModal();    // Função que permite abrir e fechar o modal
+            getEventsToModal(event._id);    // Função que faz requisição para Api para receber info
+        })
 
 
-        const secondAnchor = document.createElement('a');
+        const secondAnchor = document.createElement('a');   // Botão editar evento
         secondAnchor.innerText = "editar";
         secondAnchor.classList.add('btn');
         secondAnchor.classList.add('btn-secondary');
         secondAnchor.href = 'editar-evento.html?id=' + event._id;
 
-        const thirdAnchor = document.createElement('a');
+        const thirdAnchor = document.createElement('a');    // Botão excluir evento
         thirdAnchor.innerText = "excluir";
         thirdAnchor.classList.add('btn');
         thirdAnchor.classList.add('btn-danger');
@@ -85,52 +90,46 @@ async function createElementsFromEvents(data) {
     })
 }
 
-async function openAndCloseModal(event) {
+async function openAndCloseModal() {  // Função que abre e fecha o modal
+    const modal = document.querySelector(".myModal");
+    modal.setAttribute('style', 'display:block')
 
-    const span = document.getElementsByClassName("close")[0];
+    const span = document.getElementsByClassName("close")[0];   // Clicar no botão x para fechar
     span.onclick = function () {
         modal.style.display = "none";
     }
 
-    const modal = document.querySelector(".myModal");
-
-    window.onclick = (event) => {
+    window.onclick = (event) => {  // Clicar fora do modal, fecha ele
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
-
-    for (var x = 0; x < event.length; x++) {
-        const getId = event[x].getAttribute('data') // Para percorrer o array contendo todos os botoes
-        event[x].addEventListener("click", () => {
-            modal.setAttribute('style', 'display: block')
-            getEventsToModal(getId)
-        })
-    }
-
 }
 
-async function createListToModal(data) {
+async function createListToModal(data) {    //Função que cria o modal dinâmicamente
+    const thead = document.querySelector('#thead-modal')
+    thead.setAttribute('style', 'display:deafult')
+    document.querySelector('#tbody-modal').innerHTML = null
 
-    data.forEach((event, index) => {
-        const trElement = document.createElement('tr');
+    const dataObject = data[0]
 
-        const thElement = document.createElement('th');
-        thElement.setAttribute('scope', 'row')
-        thElement.innerText = index + 1;
+    const trElement = document.createElement('tr');
 
-        const nameTdElement = document.createElement('td');
-        nameTdElement.innerText = event.owner_name;
+    const thElement = document.createElement('th');
+    thElement.setAttribute('scope', 'row')
 
-        const emailTdElement = document.createElement('td');
-        emailTdElement.innerText = event.owner_email;
+    const nameTdElement = document.createElement('td');
+    nameTdElement.innerText = dataObject.owner_name;
 
-        const ticketsTdElement = document.createElement('td');
-        ticketsTdElement.innerText = event.number_tickets;
+    const emailTdElement = document.createElement('td');
+    emailTdElement.innerText = dataObject.owner_email;
 
-        const tableBodyModalSelector = document.querySelector('#tbody-modal')
-        tableBodyModalSelector.appendChild(trElement);
-        trElement.append(thElement, nameTdElement, emailTdElement, ticketsTdElement);
+    const ticketsTdElement = document.createElement('td');
+    ticketsTdElement.innerText = dataObject.number_tickets;
 
-    })
+    const tableBodyModalSelector = document.querySelector('#tbody-modal')
+    tableBodyModalSelector.appendChild(trElement);
+    trElement.append(thElement, nameTdElement, emailTdElement, ticketsTdElement);
+
+
 }
