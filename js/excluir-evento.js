@@ -1,3 +1,4 @@
+//selecionando os elementos do formulario
 const formSelector = document.querySelector('#form');
 const nameSelector = document.querySelector('#nome');
 const bannerSelector = document.querySelector('#banner');
@@ -6,8 +7,12 @@ const descriptionSelector = document.querySelector('#descricao');
 const dateSelector = document.querySelector('#data');
 const capacitySelector = document.querySelector('#lotacao');
 const urlObject = new URLSearchParams(window.location.search);
-console.log(urlObject.get('id'))
 
+//retirando o redimensionamento do textarea, e delimitando caracteres
+descriptionSelector.setAttribute("maxlength", "300");
+descriptionSelector.setAttribute("style", "resize:none");
+
+// Função que pega a informação da Api, transforma de json para objeto, e coloca nos inputs
 function InputValues(data) {
     nameSelector.value = data.name;
     bannerSelector.value = data.poster;
@@ -21,7 +26,7 @@ fetch('https://xp41-soundgarden-api.herokuapp.com/events/' + urlObject.get('id')
     { "method": "GET" }
 ).then(response => response.json()).then(data => InputValues(data)).catch(error => console.error(error));
 
-
+//Escutando o envento de enviar do formulario, e faz o caminho contrário de pegar as informações dos inputs, transformar em objeto para json e enviar para a api
 formSelector.addEventListener('submit', event => {
     event.preventDefault();
 
