@@ -54,6 +54,10 @@ async function createElementsFromEvents(data) {     //Função que cria os todos
 
         const thirdTdElement = document.createElement('td');
         thirdTdElement.innerText = event.attractions.join(', ');
+        console.log(window.screen.width)
+        if (window.screen.width <= 480) {   // para responsividade
+            thirdTdElement.setAttribute('style', 'display:none')
+        }
 
         const fourthTdElement = document.createElement('td');
 
