@@ -19,12 +19,11 @@ function InputValues(data) {
     attractionsSelector.value = data.attractions.join(', ');
     descriptionSelector.value = data.description;
     dateSelector.value = data.scheduled.substring(0, 16);
+    // new Date(data.scheduled).toLocaleString("pt-br")
     capacitySelector.value = data.number_tickets;
 }
 
-fetch('https://xp41-soundgarden-api.herokuapp.com/events/' + urlObject.get('id'),
-    { "method": "GET" }
-).then(response => response.json()).then(data => InputValues(data)).catch(error => console.error(error));
+fetch('https://xp41-soundgarden-api.herokuapp.com/events/' + urlObject.get('id'), { "method": "GET" }).then(response => response.json()).then(data => InputValues(data)).catch(error => console.error(error));
 
 //Escutando o envento de enviar do formulario, e faz o caminho contrário de pegar as informações dos inputs, transformar em objeto para json e enviar para a api
 formSelector.addEventListener('submit', event => {
@@ -39,17 +38,13 @@ formSelector.addEventListener('submit', event => {
         "number_tickets": capacitySelector.value
     }
 
-    fetch('https://xp41-soundgarden-api.herokuapp.com/events/' + urlObject.get('id'),
-        {
+    fetch('https://xp41-soundgarden-api.herokuapp.com/events/' + urlObject.get('id'), {
             "method": "PUT",
             "headers": { "content-type": "application/json" },
             "body": JSON.stringify(body)
-        }
-    ).then(response => console.log(response))
+        }).then(response => console.log(response))
         .then(() => alert("Evento editado com Sucesso"))
         .then(() => window.location.href = "admin.html")
         .catch(error => console.error(error));
 
 });
-
-

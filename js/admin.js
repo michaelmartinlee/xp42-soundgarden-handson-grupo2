@@ -46,9 +46,12 @@ async function createElementsFromEvents(data) { //Função que cria os todos os 
         thElement.innerText = index + 1;
 
         const firstTdElement = document.createElement('td');
-        const date = event.scheduled.substring(0, 10);
-        const time = event.scheduled.substring(11, 16);
-        firstTdElement.innerText = date.replaceAll('-', '/') + " " + time;
+        // const date = event.scheduled.substring(0, 10);
+        // const time = event.scheduled.substring(11, 16);
+        // firstTdElement.innerText = date.replaceAll('-', '/') + " " + time;
+        firstTdElement.innerText = new Date(event.scheduled).toLocaleString("pt-br")
+
+
 
         const secondTdElement = document.createElement('td');
         secondTdElement.innerText = event.name;
