@@ -56,15 +56,11 @@ main .d-flex {
     justify-content: center;
 }
 
-/* footer nav ul {
-    list-style: none;
-    display: flex;
+.img-responsive {
+    width: 100px;
+    margin-left: -40px;
+
 }
-
-footer nav ul li {
-    padding: 10px;
-} */
-
 
 @media (max-width: 320px) {
 
